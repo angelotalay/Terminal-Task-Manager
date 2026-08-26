@@ -1,0 +1,30 @@
+SideMenu {
+    border: tall green;
+}
+
+SideMenu Label {
+    text-style: bold underline;
+}
+
+SideMenu ListView {
+    align: center middle;
+}
+
+SideMenu .menu-item {
+    width: 100%;
+}
+
+SideMenu .menu-item ListItem {
+    width: 100%;
+    height: 3;
+    padding: 1 2;
+}
+
+SideMenu .menu-item ListItem:hover {
+    background: green;
+}
+
+SideMenu ListItem.-highlight {
+    background: green;
+}
+

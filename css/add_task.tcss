@@ -1,0 +1,46 @@
+#add-task-title {
+    margin-bottom: 2;
+    text-style: bold underline;
+}
+
+AddTask .form-field {
+    height: auto;
+    margin-bottom: 2;
+}
+
+#add-task-name-input {
+    width: 100%;
+}
+
+#add-task-description-group TextArea {
+    height: 5;
+}
+
+#add-task-complete-group {
+    height: auto;
+
+}
+
+
+#add-task-complete-input {
+    width: 20;
+}
+
+#add-task-buttons {
+    width: 100%;
+    height: auto;
+    margin-top: 1;
+    align: center middle;
+}
+
+#add-task-buttons Button {
+    margin-right: 1;
+}
+
+#add-task-button {
+    background: green;
+}
+
+#add-task-cancel-button {
+    background: red;
+}

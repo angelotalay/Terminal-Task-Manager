@@ -1,17 +1,18 @@
-from TaskValidator import TaskValidator
-
+from task.TaskValidator import TaskValidator
+from task.Task import Task
 
 class TaskManager:
     def __init__(self, validator: TaskValidator):
         self.validator = validator
-        self.tasks: list[dict[str, bool]] = []
+        self.tasks: list[Task] = []
 
-    def add_task(self, task_name: str, completion_bool: bool = False):
-        try:
-            task = self.validator.validate(task_name, completion_bool)
-            self.tasks.append(task)
-        except TypeError as error:
-            print(f"Could add not add task: {error}")
-        except ValueError as error:
-            print(f"Could add not add task: {error}")
+    def add_task(self, task_name: str, description:str,  completion_bool: bool = False):
+        validated = self.validator.validate(task_name, description, completion_bool)
+        self.tasks.append(validated)
+
+
+
+
+
+
 

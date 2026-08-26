@@ -1,0 +1,19 @@
+
+#dashboard {
+    height: 100%;
+    padding: 10;
+}
+
+#side_menu {
+    height: auto;
+    padding: 2;
+    align: center middle;
+}
+
+#content {
+    border: tall blue;
+    height: 100%;
+    align: center middle;
+    padding: 2;
+}
+

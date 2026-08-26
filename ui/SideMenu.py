@@ -9,16 +9,14 @@ class SideMenu(VerticalGroup):
     def compose(self) -> ComposeResult:
         yield Label("Menu")
         yield ListView(
+            ListItem(Label("View Tasks"), id="view_tasks"),
             ListItem(Label("Add Task"), id="add_task"),
             ListItem(Label("Mark Complete"), id="mark_complete"),
             ListItem(Label("Search Task"), id="search_task"),
             ListItem(Label("Sort Tasks"), id="sort_tasks"),
             ListItem(Label("Exit"), id="exit"),
+            classes="menu-item",
         )
 
-    def on_list_view_selected(self, event: ListView.Selected)->None:
-        match event.item.id:
-            case "exit":
-                ...
-
-
+    def focus_menu(self) -> None:
+        self.query_one(ListView).focus()
