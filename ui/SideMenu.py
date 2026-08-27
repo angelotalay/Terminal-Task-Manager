@@ -9,12 +9,12 @@ class SideMenu(VerticalGroup):
     def compose(self) -> ComposeResult:
         yield Label("Menu")
         yield ListView(
-            ListItem(Label("View Tasks"), id="view_tasks"),
-            ListItem(Label("Add Task"), id="add_task"),
-            ListItem(Label("Mark Complete"), id="mark_complete"),
-            ListItem(Label("Search Task"), id="search_task"),
-            ListItem(Label("Sort Tasks"), id="sort_tasks"),
-            ListItem(Label("Exit"), id="exit"),
+            ListItem(Label("View Tasks"), id="view_tasks_option"),
+            ListItem(Label("Add Task"), id="add_task_option"),
+            ListItem(Label("Mark Complete/Incomplete"), id="mark_complete_option"),
+            ListItem(Label("Search Task"), id="search_task_option"),
+            ListItem(Label("Sort Tasks"), id="sort_tasks_option"),
+            ListItem(Label("Exit"), id="exit_option"),
             classes="menu-item",
         )
 

@@ -1,7 +1,6 @@
 from textual.widgets import Input, Label, Select, Button, TextArea, Footer
 from textual.containers import HorizontalGroup, VerticalGroup, VerticalScroll
 from textual.app import ComposeResult
-from Messages import EscapeMessage
 from textual.message import Message
 
 from task.TaskManager import TaskManager
@@ -15,9 +14,6 @@ class AddTask(VerticalScroll):
         super().__init__(**kwargs)
         self.task_manager = task_manager
 
-    class Back(Message):
-        """ Message to return focus to the menu """
-        ...
 
     def compose(self) -> ComposeResult:
         yield Label("Add Task", id="add-task-title")
@@ -46,6 +42,12 @@ class AddTask(VerticalScroll):
 
         yield Footer()
 
+    class Back(Message):
+        """ Message to return focus to the menu """
+        ...
+    class TaskAdded(Message):
+        """Message to add a task to the task list"""
+
     def action_back(self):
         self.clear_form()
         self.post_message(self.Back())
@@ -66,6 +68,7 @@ class AddTask(VerticalScroll):
         try:
             self.app.task_manager.add_task(task_name, description, complete)
             self.notify("Task Added Successfully. Add another!", severity="information", title="Added a Task!")
+            self.post_message(self.TaskAdded())
             self.clear_form()
         except TypeError | ValueError as error:
             self.notify(f"Unable to add task: {error}", severity="error", title="Error Adding Task")

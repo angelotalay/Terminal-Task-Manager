@@ -8,7 +8,7 @@ from task.TaskValidator import TaskValidator
 
 class TaskManagerApp(App):
     """ A Task Manager App """
-    CSS_PATH = ["css/side_menu.tcss", "css/dashboard.tcss", "css/app.tcss", "css/add_task.tcss"]
+    CSS_PATH = ["css/side_menu.tcss", "css/dashboard.tcss", "css/app.tcss", "css/add_task.tcss", "css/task_list.tcss"]
 
     def __init__(self, task_manager: TaskManager, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -18,7 +18,6 @@ class TaskManagerApp(App):
 
     def compose(self) -> ComposeResult:
         yield Header()
-        yield Footer()
         yield Dashboard(task_manager=self.task_manager)
 
 

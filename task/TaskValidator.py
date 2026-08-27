@@ -1,7 +1,7 @@
 from task.Task import Task
 
 class TaskValidator:
-    def validate(self, task_name, description, completion_bool) -> Task:
+    def validate(self, task_name, description, completion_bool) -> tuple[str, str, bool]:
         if not self._task_name_is_string(task_name):
             raise TypeError("The task name must be a string")
         if not self._is_completion_bool(completion_bool):
@@ -10,7 +10,7 @@ class TaskValidator:
             raise ValueError("The task name must not be empty")
         if not self._task_description_is_string(description):
             raise TypeError("The task description must be a string")
-        return Task(task_name, description, completion_bool)
+        return task_name, description, completion_bool
 
     @staticmethod
     def _task_name_is_string(task_name):

@@ -8,7 +8,12 @@ class TaskManager:
 
     def add_task(self, task_name: str, description:str,  completion_bool: bool = False):
         validated = self.validator.validate(task_name, description, completion_bool)
-        self.tasks.append(validated)
+        task_id = len(self.tasks)
+        task = Task(task_id, validated[0], validated[1], validated[2])
+        self.tasks.append(task)
+
+    def sort_tasks(self):
+        ...
 
 
 

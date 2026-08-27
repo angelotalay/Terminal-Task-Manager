@@ -1,0 +1,17 @@
+TaskList {
+ height: 100%;
+}
+
+TaskList Label{
+    text-style: bold underline;
+}
+
+TaskList DataTable {
+    align: center top;
+    height: 80%;
+}
+
+TaskList SortTask {
+    align: center bottom;
+    height: 15%
+}

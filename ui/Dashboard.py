@@ -1,12 +1,12 @@
 from textual.app import ComposeResult, Widget
 from textual.containers import HorizontalGroup
-from textual.widgets import ListView, ContentSwitcher
+from textual.widgets import ListView, ContentSwitcher, DataTable
 
 from task.TaskManager import TaskManager
 from ui.SideMenu import SideMenu
 from ui.TaskList import TaskList
 from ui.AddTask import AddTask
-from Messages import EscapeMessage
+from ui.SortTask import SortTask
 
 class Dashboard(Widget):
     """ The dashboard widget for the Task Manager App"""
@@ -22,23 +22,40 @@ class Dashboard(Widget):
                 yield TaskList(id="view_tasks", task_manager=self.task_manager)
                 yield AddTask(id="add_task", task_manager=self.task_manager)
 
-
-    def switch_view(self, view_id):
+    # Logic
+    def switch_view(self, view_id: str, focus_default: bool = True) -> None:
         switcher = self.query_one("#content", ContentSwitcher)
         switcher.current = view_id
+
+        if not focus_default:
+            return
 
         view = switcher.visible_content
 
         if view is not None and hasattr(view, "focus_default"):
             self.call_after_refresh(view.focus_default)
 
-    def on_list_view_selected(self, event: ListView.Selected):
+    def on_list_view_selected(self, event: ListView.Selected) -> None:
         selected_id = event.item.id
         match selected_id:
-            case "add_task" | "view_tasks":
+            case "add_task_option" | "view_tasks_option":
                 self.switch_view(selected_id)
-            case "exit":
+            case "sort_tasks_option":
+                self.switch_view("view_tasks", focus_default=False)
+                task_list = self.query_one(TaskList)
+                task_list.mount(SortTask(id="sort_tasks", task_manager=self.task_manager))
+                self.query_one(SortTask).focus_default()
+            case "exit_option":
                 self.app.exit()
 
+    # Handlers
     def on_add_task_back(self, message: AddTask.Back) -> None:
+        self.query_one(SideMenu).focus_menu()
+
+    def on_add_task_task_added(self, message: AddTask.TaskAdded) -> None:
+        table = self.query_one("#task_list_table", DataTable)
+        self.query_one(TaskList).populate_table(table)
+
+    def on_task_list_back(self, message: TaskList.Back) -> None:
+        self.query("#sort_tasks").remove()
         self.query_one(SideMenu).focus_menu()

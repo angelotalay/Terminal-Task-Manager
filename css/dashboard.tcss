@@ -7,12 +7,14 @@
 #side_menu {
     height: auto;
     padding: 2;
+    width: 30%;
     align: center middle;
 }
 
 #content {
     border: tall blue;
     height: 100%;
+    width: 70%;
     align: center middle;
     padding: 2;
 }
