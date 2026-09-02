@@ -1,6 +1,8 @@
 from task.Task import Task
 
 class TaskValidator:
+    SORT_ORDER_DIRECTION = ["ascending", "descending"]
+
     def validate(self, task_name, description, completion_bool) -> tuple[str, str, bool]:
         if not self._task_name_is_string(task_name):
             raise TypeError("The task name must be a string")

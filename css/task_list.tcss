@@ -15,3 +15,15 @@ TaskList SortTask {
     align: center bottom;
     height: 15%
 }
+
+SortTask #sort_select {
+    width: 50%;
+}
+
+SortTask #sort_order {
+    width: 30%;
+}
+
+SortTask Button {
+    width: 20%;
+}

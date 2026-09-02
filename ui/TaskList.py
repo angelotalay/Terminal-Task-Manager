@@ -38,13 +38,9 @@ class TaskList(VerticalGroup):
 
     def populate_table(self, table):
         table.clear()
-        for index, task in enumerate(self.task_manager.tasks):
-            task_id = index + 1
+        for task in self.task_manager.tasks:
+            task_id = task.task_id
             task_name = task.task_name
             task_description = task.description
             task_status = "✅" if task.completion_status == True else "❌"
-
             table.add_row(task_id, task_name, task_description, task_status)
-
-
-

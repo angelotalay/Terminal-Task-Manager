@@ -1,3 +1,11 @@
+from enum import StrEnum
+
+class TaskAttributes(StrEnum):
+    ID = "task_id"
+    NAME = "task_name"
+    DESCRIPTION = "description"
+    COMPLETED = "completion_bool"
+
 class Task:
     def __init__(self, task_id: int, task_name: str, description:str, completion_status: bool):
         self.task_id = task_id
@@ -5,10 +13,3 @@ class Task:
         self.description = description
         self.completion_status = completion_status
 
-    def get_task_name(self):
-        return self.task_name
-
-    def get_completion_status(self):
-        return self.completion_status
-    def get_description(self):
-        return self.description
