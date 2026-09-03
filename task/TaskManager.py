@@ -10,7 +10,6 @@ class SortOrder(StrEnum):
 
 
 class TaskManager:
-
     def __init__(self, validator: TaskValidator) -> None:
         self.validator = validator
         self.tasks: list[Task] = []
@@ -81,5 +80,3 @@ class TaskManager:
 
         return matches
 
-    def set_completion_status(self, task: Task, completion_status: bool) -> None:
-        task.completion_status = completion_status

@@ -1,3 +1,7 @@
+AddTask {
+    height: 100%;
+}
+
 #add-task-title {
     margin-bottom: 2;
     text-style: bold underline;
@@ -8,39 +12,38 @@ AddTask .form-field {
     margin-bottom: 2;
 }
 
-#add-task-name-input {
+#add_task_name_input {
     width: 100%;
 }
 
-#add-task-description-group TextArea {
-    height: 5;
+#add_task_description_group TextArea {
 }
 
-#add-task-complete-group {
+#add_task_complete_group {
     height: auto;
 
 }
 
 
-#add-task-complete-input {
+#add_task_complete_input {
     width: 20;
 }
 
-#add-task-buttons {
+#add_task_buttons {
     width: 100%;
     height: auto;
     margin-top: 1;
     align: center middle;
 }
 
-#add-task-buttons Button {
+#add_task_buttons Button {
     margin-right: 1;
 }
 
-#add-task-button {
+#add_task_button {
     background: green;
 }
 
-#add-task-cancel-button {
+#add_task_cancel_button {
     background: red;
 }

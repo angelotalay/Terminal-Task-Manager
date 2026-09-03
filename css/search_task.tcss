@@ -1,0 +1,17 @@
+SearchTask{
+    height: 100%;
+
+}
+
+SearchTask Label {
+    text-style: underline;
+}
+
+SearchTask Input {
+    margin-top: 1;
+    margin-bottom:1;
+}
+
+SearchTask SearchList {
+    height: 1fr;
+}

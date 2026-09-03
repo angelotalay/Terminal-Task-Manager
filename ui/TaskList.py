@@ -4,6 +4,7 @@ from textual.containers import VerticalGroup
 from textual.message import Message
 
 from task.TaskManager import TaskManager
+from constants.task import TASK_TABLE_CONFIG
 
 
 class TaskList(VerticalGroup):
@@ -23,11 +24,8 @@ class TaskList(VerticalGroup):
     def on_mount(self) -> None:
         table = self.query_one(DataTable)
         table.cursor_type = "row"
-        table.cell_padding = 2
-        table.add_column("ID", width=6)
-        table.add_column("Task", width=20)
-        table.add_column("Description", width=35)
-        table.add_column("Status", width=10)
+        for i in range(0, len(TASK_TABLE_CONFIG["columns"])):
+            table.add_column(TASK_TABLE_CONFIG["columns"][i], width=TASK_TABLE_CONFIG["width"][i])
         self.populate_table(table)
 
     class Back(Message):

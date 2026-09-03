@@ -1,14 +1,16 @@
 from textual.app import ComposeResult, Widget
 from textual.containers import HorizontalGroup
 from textual.css.query import NoMatches
-from textual.widgets import ListView, ContentSwitcher, DataTable
+from textual.widgets import ListView, ContentSwitcher, DataTable, Input
 
 from task.TaskManager import TaskManager
+from ui.EditTask import EditTask
 from ui.SearchTask import SearchTask
 from ui.SideMenu import SideMenu
 from ui.TaskList import TaskList
 from ui.AddTask import AddTask
 from ui.SortTask import SortTask
+
 
 class Dashboard(Widget):
     """ The dashboard widget for the Task Manager App"""
@@ -24,6 +26,7 @@ class Dashboard(Widget):
                 yield TaskList(id="view_tasks", task_manager=self.task_manager)
                 yield AddTask(id="add_task", task_manager=self.task_manager)
                 yield SearchTask(id="search_tasks", task_manager=self.task_manager)
+                yield EditTask(id="edit_task", task_manager=self.task_manager)
 
     # Logic
     def switch_view(self, view_id: str, focus_default: bool = True) -> None:
@@ -60,7 +63,7 @@ class Dashboard(Widget):
                     )
                     self.query_one(SortTask).focus_default()
             case "search_tasks_option":
-                self.switch_view("search_tasks", focus_default=False)
+                self.switch_view("search_tasks")
 
             case "exit_option":
                 self.app.exit()
@@ -77,10 +80,18 @@ class Dashboard(Widget):
         self.query("#sort_tasks").remove()
         self.query_one(SideMenu).focus_menu()
 
-    def on_sort_task_sort(self, message: SortTask.Sort):
+    def on_sort_task_sort(self, message: SortTask.Sort) -> None:
         self.task_manager.sort_tasks(message.sort_by, message.sort_order)
         table = self.query_one("#task_list_table", DataTable)
         self.query_one(TaskList).populate_table(table)
         table.focus()
+
     def on_search_task_back(self, message: SearchTask.Back) -> None:
-        ...
+        self.query_one(SideMenu).focus_menu()
+
+    def on_search_task_edit_task(self, message: SearchTask.EditTask) -> None:
+        selected_task = message.task
+        edit_task_widget = self.query_one("#edit_task", EditTask)
+        edit_task_widget.load_task(selected_task)
+        print("working function")
+        self.switch_view("edit_task")
