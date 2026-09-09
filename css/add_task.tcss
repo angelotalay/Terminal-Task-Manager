@@ -1,49 +1,50 @@
-AddTask {
+AddTask,
+EditTask {
     height: 100%;
-}
-
-#add-task-title {
-    margin-bottom: 2;
-    text-style: bold underline;
-}
-
-AddTask .form-field {
-    height: auto;
-    margin-bottom: 2;
-}
-
-#add_task_name_input {
     width: 100%;
 }
 
-#add_task_description_group TextArea {
-}
-
-#add_task_complete_group {
-    height: auto;
-
-}
-
-
-#add_task_complete_input {
-    width: 20;
-}
-
-#add_task_buttons {
+TaskForm {
+    height: 1fr;
     width: 100%;
-    height: auto;
-    margin-top: 1;
-    align: center middle;
+    overflow-y: auto;
 }
 
-#add_task_buttons Button {
+TaskForm .form_field {
+    height: auto;
+    margin-bottom: 2;
+}
+
+TaskForm .form_field Label {
+    text-style: underline;
+}
+
+TaskForm .task_name_input {
+    width: 100%;
+}
+
+TaskForm .task_description_input {
+    width: 100%;
+    height: 5;
+}
+
+TaskForm .task_complete_input {
+    width: 30%;
+    min-width: 12;
+}
+
+TaskForm .task_buttons {
+    height: auto;
+    width: 100%;
+    align-horizontal: center;
+}
+
+TaskForm .task_submit_button {
+    background: green;
     margin-right: 1;
 }
 
-#add_task_button {
-    background: green;
-}
-
-#add_task_cancel_button {
+TaskForm .task_cancel_button {
     background: red;
+    margin-left: 1;
 }

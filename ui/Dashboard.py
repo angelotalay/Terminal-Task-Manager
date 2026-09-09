@@ -1,8 +1,10 @@
 from textual.app import ComposeResult, Widget
 from textual.containers import HorizontalGroup
 from textual.css.query import NoMatches
+from textual.getters import query_one
 from textual.widgets import ListView, ContentSwitcher, DataTable, Input
 
+from messages import BackToMenu
 from task.TaskManager import TaskManager
 from ui.EditTask import EditTask
 from ui.SearchTask import SearchTask
@@ -28,6 +30,25 @@ class Dashboard(Widget):
                 yield SearchTask(id="search_tasks", task_manager=self.task_manager)
                 yield EditTask(id="edit_task", task_manager=self.task_manager)
 
+    # Getters
+    def get_task_list(self) -> TaskList:
+        return self.query_one("#view_tasks", TaskList)
+
+    def get_add_task(self) -> AddTask:
+        return self.query_one("#add_task", AddTask)
+
+    def get_search_task(self) -> SearchTask:
+        return self.query_one("#search_tasks", SearchTask)
+
+    def get_edit_task(self) -> EditTask:
+        return self.query_one("#edit_task", EditTask)
+
+    def get_sort_task(self) -> SortTask:
+        return self.query_one("#sort_tasks", SortTask)
+
+    def get_side_menu(self) -> SideMenu:
+        return self.query_one("#side_menu", SideMenu)
+
     # Logic
     def switch_view(self, view_id: str, focus_default: bool = True) -> None:
         switcher = self.query_one("#content", ContentSwitcher)
@@ -41,7 +62,7 @@ class Dashboard(Widget):
         if view is not None and hasattr(view, "focus_default"):
             self.call_after_refresh(view.focus_default)
 
-    def on_list_view_selected(self, event: ListView.Selected) -> None:
+    async def on_list_view_selected(self, event: ListView.Selected) -> None:
         selected_id = event.item.id
         match selected_id:
             case "add_task_option":
@@ -51,47 +72,46 @@ class Dashboard(Widget):
             case "sort_tasks_option":
                 self.switch_view("view_tasks", focus_default=False)
                 try:
-                    sort_task = self.query_one(SortTask)
-                    sort_task.focus_default()
+                    self.get_sort_task().focus_default()
                 except NoMatches:
-                    task_list = self.query_one(TaskList)
-                    task_list.mount(
-                        SortTask(
-                            id="sort_tasks",
-                            task_manager=self.task_manager,
-                        )
-                    )
-                    self.query_one(SortTask).focus_default()
+                    await self.get_task_list().mount(SortTask(id="sort_tasks", task_manager=self.task_manager))
+                    self.get_sort_task().focus_default()
             case "search_tasks_option":
                 self.switch_view("search_tasks")
-
             case "exit_option":
                 self.app.exit()
 
     # Handlers
-    def on_add_task_back(self, message: AddTask.Back) -> None:
-        self.query_one(SideMenu).focus_menu()
-
     def on_add_task_task_added(self, message: AddTask.TaskAdded) -> None:
-        table = self.query_one("#task_list_table", DataTable)
-        self.query_one(TaskList).populate_table(table)
+        table = self.get_task_list().query_one(DataTable)
+        self.get_task_list().populate_table(table)
 
-    def on_task_list_back(self, message: TaskList.Back) -> None:
-        self.query("#sort_tasks").remove()
-        self.query_one(SideMenu).focus_menu()
+    async def on_back_to_menu(
+            self,
+            message: BackToMenu,
+    ) -> None:
+        try:
+            sort_task = self.get_sort_task()
+        except NoMatches:
+            pass
+        else:
+            await sort_task.remove()
+
+        self.get_side_menu().focus_menu()
 
     def on_sort_task_sort(self, message: SortTask.Sort) -> None:
         self.task_manager.sort_tasks(message.sort_by, message.sort_order)
-        table = self.query_one("#task_list_table", DataTable)
-        self.query_one(TaskList).populate_table(table)
+        table = self.get_task_list().get_table()
+        self.get_task_list().populate_table(table)
         table.focus()
 
     def on_search_task_back(self, message: SearchTask.Back) -> None:
-        self.query_one(SideMenu).focus_menu()
+        self.get_side_menu().focus_menu()
 
     def on_search_task_edit_task(self, message: SearchTask.EditTask) -> None:
         selected_task = message.task
-        edit_task_widget = self.query_one("#edit_task", EditTask)
-        edit_task_widget.load_task(selected_task)
-        print("working function")
+        self.get_edit_task().load_task(selected_task)
         self.switch_view("edit_task")
+
+    def on_edit_task_task_edited(self, message: EditTask.TaskEdited) -> None:
+        self.switch_view("view_tasks")

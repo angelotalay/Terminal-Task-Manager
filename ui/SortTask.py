@@ -5,7 +5,6 @@ from textual.message import Message
 
 from task.TaskManager import TaskManager, SortOrder
 from task.Task import TaskAttributes
-from task.Task import Task
 
 
 class SortTask(Widget):
@@ -33,6 +32,12 @@ class SortTask(Widget):
                 yield Select(self.ORDER_OPTIONS, id="sort_order")
                 yield Button("Ok", id="sort_button")
 
+    def get_sort_select(self) -> Select:
+        return self.query_one("#sort_select", Select)
+
+    def get_sort_order(self) -> Select:
+        return self.query_one("#sort_order", Select)
+
     class Sort(Message):
         """ Message class to sort the tasks """
 
@@ -52,23 +57,31 @@ class SortTask(Widget):
             )
             return
 
-        sort_by = self.query_one("#sort_select", Select).selection
-        sort_order = self.query_one("#sort_order", Select).selection
+        sort_by = self.get_sort_select().selection
 
         if not isinstance(sort_by, TaskAttributes):
             self.notify(
                 "Please select what to sort by.",
-                severity="warning"
+                severity="warning",
             )
             return
+
+        if sort_by == TaskAttributes.COMPLETED:
+            sort_order = SortOrder.ASCENDING
+        else:
+            sort_order = self.get_sort_order().selection
 
         if not isinstance(sort_order, SortOrder):
             self.notify(
                 "Please select a sort order.",
-                severity="warning"
+                severity="warning",
             )
             return
 
-        self.post_message(
-            self.Sort(sort_by, sort_order)
-        )
+        self.post_message(self.Sort(sort_by, sort_order))
+
+    def on_select_changed(self, event: Select.Changed) -> None:
+        if event.select.id == "sort_select":
+            self.get_sort_order().display = (
+                    event.value != TaskAttributes.COMPLETED
+            )

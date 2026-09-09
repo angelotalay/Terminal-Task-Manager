@@ -7,7 +7,7 @@ from textual.message import Message
 from task.TaskManager import TaskManager
 from constants.task import TASK_TABLE_CONFIG
 from task.Task import Task
-
+from messages import BackToMenu
 
 # TODO: When searching for a task, the search task runs on type.
 class SearchTask(Widget):
@@ -24,9 +24,6 @@ class SearchTask(Widget):
             yield SearchList(id="search_list")
             yield Footer()
 
-    class Back(Message):
-        """ Message to get back to the menu """
-
     class EditTask(Message):
         """ Message to go to the edit form for a particular task """
         def __init__(self, task: Task):
@@ -35,7 +32,7 @@ class SearchTask(Widget):
 
     def action_back(self):
         self.query_one("#search_input", Input).clear()
-        self.post_message(self.Back())
+        self.post_message(BackToMenu())
 
     def on_data_table_row_selected(self, event: DataTable.RowSelected):
         if not event.row_key.value:

@@ -31,38 +31,40 @@ class TaskManager:
     def sort_tasks(self, sort_category: TaskAttributes, sort_order: SortOrder) -> list[Task]:
         match sort_category:
             case TaskAttributes.NAME:
-                return self._sort_by_name(sort_order)
+                self._sort_by_name(sort_order)
             case TaskAttributes.DESCRIPTION:
-                return self._sort_by_description(sort_order)
+                self._sort_by_description(sort_order)
             case TaskAttributes.ID:
-                return self._sort_by_id(sort_order)
+                self._sort_by_id(sort_order)
             case TaskAttributes.COMPLETED:
-                return self._sort_by_completion_bool()
+                self._sort_by_completion_bool()
+        return self.tasks
 
     def _sort(self, sort_order: SortOrder, attribute: TaskAttributes) -> list[Task]:
         tasks = self.tasks
         if sort_order == SortOrder.ASCENDING:
-            return sorted(tasks, key=lambda task: getattr(task, attribute), reverse=True)
+            return sorted(tasks, key=lambda task: getattr(task, attribute))
         else:
             return sorted(tasks, key=lambda task: getattr(task, attribute), reverse=True)
 
-    def _sort_by_id(self, sort_order: SortOrder) -> list[Task]:
+    def _sort_by_id(self, sort_order: SortOrder) -> None:
         self._set_tasks(self._sort(sort_order=sort_order, attribute=TaskAttributes.ID))
 
-    def _sort_by_name(self, sort_order: SortOrder) -> list[Task]:
+    def _sort_by_name(self, sort_order: SortOrder) -> None:
         self._set_tasks(self._sort(sort_order=sort_order, attribute=TaskAttributes.NAME))
 
-    def _sort_by_description(self, sort_order: SortOrder) -> list[Task]:
+    def _sort_by_description(self, sort_order: SortOrder) -> None:
         self._set_tasks(self._sort(sort_order=sort_order, attribute=TaskAttributes.DESCRIPTION))
 
-    def _sort_by_completion_bool(self) -> list[Task]:
+    def _sort_by_completion_bool(self) -> None:
         completed = sorted([completed_task for completed_task in self.tasks if
-                            completed_task.completion_status == TaskAttributes.COMPLETED],
+                            completed_task.completion_status == True],
                            key=lambda task: TaskAttributes.ID)
         uncompleted = sorted([uncompleted_task for uncompleted_task in self.tasks if
-                              uncompleted_task.completion_status == TaskAttributes.COMPLETED],
+                              uncompleted_task.completion_status == False],
                              key=lambda task: TaskAttributes.ID)
-        return [*completed, *uncompleted]
+
+        self._set_tasks([*uncompleted, *completed])
 
     def _set_tasks(self, tasks: list[Task]) -> None:
         self.tasks = tasks
@@ -79,4 +81,3 @@ class TaskManager:
                 matches.append(task)
 
         return matches
-
