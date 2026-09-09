@@ -99,6 +99,11 @@ class Dashboard(Widget):
 
         self.get_side_menu().focus_menu()
 
+    def on_edit_task(self, message: EditTask) -> None:
+        selected_task = message.task
+        self.get_edit_task().load_task(selected_task)
+        self.switch_view("edit_task")
+
     def on_sort_task_sort(self, message: SortTask.Sort) -> None:
         self.task_manager.sort_tasks(message.sort_by, message.sort_order)
         table = self.get_task_list().get_table()
@@ -108,10 +113,6 @@ class Dashboard(Widget):
     def on_search_task_back(self, message: SearchTask.Back) -> None:
         self.get_side_menu().focus_menu()
 
-    def on_search_task_edit_task(self, message: SearchTask.EditTask) -> None:
-        selected_task = message.task
-        self.get_edit_task().load_task(selected_task)
-        self.switch_view("edit_task")
-
     def on_edit_task_task_edited(self, message: EditTask.TaskEdited) -> None:
         self.switch_view("view_tasks")
+

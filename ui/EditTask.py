@@ -6,6 +6,7 @@ from textual.widgets import Button, Footer, Label
 from task.Task import Task
 from task.TaskManager import TaskManager
 from ui.TaskForm import TaskForm
+from messages import BackToMenu
 
 
 class EditTask(VerticalGroup):
@@ -14,9 +15,6 @@ class EditTask(VerticalGroup):
         self.task_manager = task_manager
         self.selected_task: Task | None = None
 
-    class TaskEdited(Message):
-        """Notify the parent that a task was edited."""
-
     def compose(self) -> ComposeResult:
         yield Label("Edit Task", id="edit_task_title")
         yield TaskForm(
@@ -24,6 +22,9 @@ class EditTask(VerticalGroup):
             submit_label="Save Changes",
         )
         yield Footer()
+
+    class TaskEdited(Message):
+        """Notify the parent that a task was edited."""
 
     def focus_default(self) -> None:
         self.query_one("#edit_task_form", TaskForm).focus_default()
@@ -37,7 +38,7 @@ class EditTask(VerticalGroup):
             event.stop()
             form = self.query_one("#edit_task_form", TaskForm)
             form.clear_form()
-            form.focus_default()
+            self.post_message(BackToMenu())
 
     def submit_task(self) -> None:
         task = self.selected_task

@@ -2,12 +2,12 @@ from textual.app import ComposeResult
 from textual.widget import Widget
 from textual.widgets import Input, Label, Footer, DataTable
 from textual.containers import VerticalGroup
-from textual.message import Message
 
 from task.TaskManager import TaskManager
 from constants.task import TASK_TABLE_CONFIG
 from task.Task import Task
-from messages import BackToMenu
+from messages import BackToMenu, EditTask
+
 
 # TODO: When searching for a task, the search task runs on type.
 class SearchTask(Widget):
@@ -24,12 +24,6 @@ class SearchTask(Widget):
             yield SearchList(id="search_list")
             yield Footer()
 
-    class EditTask(Message):
-        """ Message to go to the edit form for a particular task """
-        def __init__(self, task: Task):
-            super().__init__()
-            self.task = task
-
     def action_back(self):
         self.query_one("#search_input", Input).clear()
         self.post_message(BackToMenu())
@@ -42,7 +36,7 @@ class SearchTask(Widget):
         task = self.task_manager.get_task(task_id)
 
         if task is not None:
-            self.post_message(self.EditTask(task))
+            self.post_message(EditTask(task))
 
     def on_input_submitted(self, event: Input.Submitted) -> None:
         self.query_one("#search_list", SearchList).focus()
